@@ -25,10 +25,21 @@ class SnakesAndGems(object):
         self.boxes.remove('snakes')
         print self.boxes # see all!
 
+    def offer_to_swap(self, player):
+        if player.swap_or_not():
+            player.box = self.boxes[0]
+            print 'The boxes have been swapped!'
+        else:
+            print 'You will keep your first choice then!'
+
     def run_game(self, player):
         self.game_intro()
         player.choose_box('The boxes have been shuffled, which one will you pick? (1,2,3) >> ')
         self.remove_a_box(player)
+        print 'I have removed one of the other boxes... it was full of snakes'
+        print 'Would you like to swap you box with the remaining box? (y / N)'
+        self.offer_to_swap(player)
+
 
 class Player(object):
     """docstring for Player"""
@@ -47,6 +58,12 @@ class Player(object):
                     self.choose_box(prompt)
             except ValueError:
                 print "That is not a number!"
+
+    def swap_or_not(self):
+        player_answer = raw_input().upper()
+        return True if player_answer[:1] == 'Y' else False
+
+
 
 # ############ GAME START ############ #
 if __name__ == '__main__':

@@ -10,4 +10,8 @@ Studies in comparative Python and Ruby
 
 __________
 
-implementations of the Monty Hall problem.
+Fun coding challenges written in Python and Ruby.
+
+ :snake: :snake: :snake:
+
+All currently run from the CLI

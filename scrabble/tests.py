@@ -17,12 +17,9 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.word_score('BEE'), 5)
         self.assertEqual(self.game.word_score('BED'), 6)
 
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
+    def test_scrabble_bag(self):
+        self.assertEqual(len(self.game.scrabble_bag), 18)
+
 
 if __name__ == '__main__':
     unittest.main()

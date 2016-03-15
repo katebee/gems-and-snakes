@@ -11,7 +11,7 @@ class TestGame(unittest.TestCase):
         self.game = Game()
 
     def test_letter_value(self):
-        self.assertEqual(len(self.game.letter_values), 3)
+        self.assertEqual(len(self.game.letter_values), 26)
 
     def test_word_score(self):
         self.assertEqual(self.game.word_score(''), 0)
@@ -19,12 +19,12 @@ class TestGame(unittest.TestCase):
         self.assertEqual(self.game.word_score('BED'), 6)
 
     def test_scrabble_bag(self):
-        self.assertEqual(len(self.game.scrabble_bag), 18)
+        self.assertEqual(len(self.game.scrabble_bag), 98)
 
     def test_generate_rack(self):
         rack = self.game._generate_rack()
         self.assertEqual(len(rack), 7)
-        self.assertEqual(len(self.game.scrabble_bag), 11)
+        self.assertEqual(len(self.game.scrabble_bag), 91)
 
 
 class TestPlayer(unittest.TestCase):

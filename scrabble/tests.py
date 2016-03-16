@@ -37,6 +37,10 @@ class TestPlayer(unittest.TestCase):
     def test_player_rack(self):
         self.assertEqual(self.player.rack, ['E', 'D', 'B'])
 
+    def test_validate_answer(self):
+        self.assertEqual(self.player.validate_answer(self.player.rack, 'BED'), True)
+        self.assertEqual(self.player.validate_answer(self.player.rack, 'BEE'), False)
+        self.assertEqual(self.player.validate_answer(self.player.rack, 'DEED'), False)
 
 if __name__ == '__main__':
     unittest.main()

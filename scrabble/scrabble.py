@@ -1,6 +1,7 @@
 
 import random
 
+from collections import Counter
 
 class Game(object):
     """docstring for Game"""
@@ -57,7 +58,18 @@ class Player(object):
     def check_word_score(self):
         """Find out the word score for any word"""
         player_input = raw_input('Enter a word >> ').upper()
-        word_score(player_input)
+        Game.word_score(player_input)
+
+    def validate_answer(self, rack, word):
+        word_to_check = word
+        rack_to_check = rack
+        try:
+            for letter in word:
+                index_to_pop = rack_to_check.index(letter)
+                rack_to_check.pop(index_to_pop)
+            return True
+        except Exception as e:
+            return False
 
 
 # ########### GAME START ########### #

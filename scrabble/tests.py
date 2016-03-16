@@ -22,7 +22,7 @@ class TestGame(unittest.TestCase):
         self.assertEqual(len(self.game.scrabble_bag), 98)
 
     def test_generate_rack(self):
-        rack = self.game._generate_rack()
+        rack = self.game.generate_rack()
         self.assertEqual(len(rack), 7)
         self.assertEqual(len(self.game.scrabble_bag), 91)
 
@@ -37,10 +37,22 @@ class TestPlayer(unittest.TestCase):
     def test_player_rack(self):
         self.assertEqual(self.player.rack, ['E', 'D', 'B'])
 
+    def test_take_turn(self):
+        self
+
+    def test_update_score(self):
+        self.assertEqual(self.player.update_score('BEE', 5), "'BEE' is worth 5 points!")
+        self.assertEqual(self.player.score, 5)
+
     def test_validate_answer(self):
-        self.assertEqual(self.player.validate_answer(self.player.rack, 'BED'), True)
-        self.assertEqual(self.player.validate_answer(self.player.rack, 'BEE'), False)
-        self.assertEqual(self.player.validate_answer(self.player.rack, 'DEED'), False)
+        self.assertEqual(self.player._validate_answer(self.player.rack, 'BED'), True)
+        self.assertEqual(self.player._validate_answer(self.player.rack, 'BEE'), False)
+        self.assertEqual(self.player._validate_answer(self.player.rack, 'DEED'), False)
+
+    def test_validate_input(self):
+        self.assertEqual(self.player._validate_input('TRUE'), True)
+        self.assertEqual(self.player._validate_input('ABC123'), False)
+        self.assertEqual(self.player._validate_input('F4L$E'), False)
 
 if __name__ == '__main__':
     unittest.main()

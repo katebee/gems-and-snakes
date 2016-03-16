@@ -1,7 +1,17 @@
 
 import random
 
-from collections import Counter
+
+def main():
+    print 'Running Scrabble'
+    game = Game()
+    player = Player(game.generate_rack())
+    print player.rack
+    player.take_turn(game)
+
+    # print '\'BEE\' is worth %d points' % game.word_score('BEE')
+    # print '\'BED\' is worth %d points' % game.word_score('BED')
+
 
 class Game(object):
     """docstring for Game"""
@@ -20,10 +30,6 @@ class Game(object):
 
         self.scrabble_bag = self._generate_scrabble_bag()
 
-    def run(self):
-        player = Player(self._generate_rack())
-        print player.rack
-
     def word_score(self, word):
         """Calculate the score for a word"""
         score = 0
@@ -41,7 +47,7 @@ class Game(object):
         random.shuffle(scrabble_bag)
         return scrabble_bag
 
-    def _generate_rack(self):
+    def generate_rack(self):
         """Assign seven tiles from a scrabble_bag"""
         rack = []
         for _ in range(7):
@@ -54,13 +60,31 @@ class Player(object):
     """docstring for Player"""
     def __init__(self, rack):
         self.rack = rack
+        self.score = 0
 
-    def check_word_score(self):
+    def take_turn(self, game):
+        word = self.get_player_input()
+        if word:
+            score = game.word_score(word)
+            print self.update_score(word, score)
+
+    def get_player_input(self):
         """Find out the word score for any word"""
         player_input = raw_input('Enter a word >> ').upper()
-        Game.word_score(player_input)
+        # TODO: input validation
+        if self._validate_answer(self.rack, player_input):
+            return player_input
 
-    def validate_answer(self, rack, word):
+    def update_score(self, word, score):
+        self.score += score
+        return "'{0}' is worth {1} points!".format(word, score)
+
+    def _validate_input(self, input):
+        # hello regex my old friend
+        pass
+
+    def _validate_answer(self, rack, word):
+        """Ensure the player has the correct tiles to create the word"""
         word_to_check = word
         rack_to_check = rack
         try:
@@ -76,10 +100,4 @@ class Player(object):
 
 if __name__ == '__main__':
 
-    print 'Running Scrabble'
-
-    game = Game()
-    game.run()
-
-    print '\'BEE\' is worth %d points' % game.word_score('BEE')
-    print '\'BED\' is worth %d points' % game.word_score('BED')
+    main()

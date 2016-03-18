@@ -2,25 +2,22 @@ import random
 import time
 import json
 import sys
-# could also use sys argsv ArgumentParser()
+
 
 class SnakesAndGems(object):
     """docstring for SnakesAndGems"""
     def __init__(self):
         self.boxes = ['gems', 'snakes', 'snakes']
         self.player_choice = None
-    # set up the game
-    # get user input_check
+
     def wait_and_space(self, secs=1):
         print '...'
         time.sleep(secs)
 
     def game_intro(self):
-        print 'Welcome to Gems and Snakes!'
-        self.wait_and_space(0.5)
-        print 'I have three boxes, one contains gems, the others are full of snakes:'
-        print self.boxes  # format this nicely... unicode icons?
-        self.wait_and_space(0.5)
+        print '\n~~~ GEMS AND SNAKES ~~~\n'
+        print 'I have three boxes, one contains gems, the other two contain snakes:'
+        print "\n\xF0\x9F\x90\x8D \xF0\x9F\x92\x8E \xF0\x9F\x90\x8D\n"
         random.shuffle(self.boxes)
 
     def remove_a_box(self, player):
@@ -38,43 +35,39 @@ class SnakesAndGems(object):
 
     def win_lose(self, player):
         if player.box == 'snakes':
-            print "Oh no! you open your box and find snakes!"
+            print 'Oh no! you open your box and find snakes! \xF0\x9F\x90\x8D \xF0\x9F\x90\x8D'
         else:
-            print "Hooray! You recieved a box of gems!"
+            print 'Hooray! You recieved a box of gems! \xF0\x9F\x92\x8E \xF0\x9F\x92\x8E'
             player.won = True
 
     def run_game(self, player):
         self.game_intro()
-        player.choose_box('The boxes have been shuffled, which one will you pick? (1,2,3) >> ')
+        player.choose_box('The boxes have been shuffled! Which one will you pick? (1,2,3) >> ')
         self.remove_a_box(player)
+        self.wait_and_space(0.5)
         self.offer_to_swap(player, 'Would you like to swap you box with the remaining box? (y / N) >> ')
         self.wait_and_space(0.5)
         self.win_lose(player)
-        stats = self.record_stats_context_manager(player)
-        self.print_stats(stats)
+        self.update_stats(self.get_current_stats())
+        self.print_stats(self.get_current_stats())
 
-# def record_stats(win_or_not):
-#     stats_file = open("stats.json", "r+")
-#     print stats_file.read()
-#     stats_file.close()
-
-    def record_stats_context_manager(self, player):
-        # split reading and storing stats.
-        with open("stats.json", "r+") as stats_file:
-            # print stats_file.read()
+    def get_current_stats(self):
+        """Imports game stats as a dictionary"""
+        with open('stats.json', 'r+') as stats_file:
             stats = json.load(stats_file)
-            # put below in own function, no longer seek, just open and overwrite
-            stats_file.seek(0)
+            return stats
+
+    def update_stats(self, stats):
+        with open('stats.json', 'r+') as stats_file:
             stats['play_count'] += 1
             if player.won:
-                stats["won_count"] += 1
+                stats['won_count'] += 1
                 if player.swap:
-                    stats["swapped_and_won"] += 1
+                    stats['swapped_and_won'] += 1
             else:
                 if player.swap:
-                    stats["swapped_and_lost"] += 1
+                    stats['swapped_and_lost'] += 1
             json.dump(stats, stats_file)
-            return stats
 
     def print_stats(self, stats):
         if len(sys.argv) > 1:
@@ -85,14 +78,15 @@ class SnakesAndGems(object):
                 float(stats['swapped_and_won']) / float(stats['play_count']) * 100)
             swap_percentage = int(float(stats['swapped_and_won'] + stats['swapped_and_lost']) / float(stats['play_count']) * 100)
             print
-            print "Total games: {0}  Wins: {1}  Losses: {2}".format(
+            print 'Total games: {0}  Wins: {1}  Losses: {2}'.format(
                 stats['play_count'], stats['won_count'], total_losses)
-            print "People who swap win {0}% of the time".format(swap_win_percentage)
-            print "People who stay win {0}% of the time".format(stay_win_percentage)
-            print "{0}% of people understand probability".format(swap_percentage)
+            print 'People who swap win {0}% of the time'.format(swap_win_percentage)
+            print 'People who stay win {0}% of the time'.format(stay_win_percentage)
+            print '{0}% of people understand probability'.format(swap_percentage)
+
 
 class Player(object):
-    """docstring for Player"""
+    'docstring for Player'
     def __init__(self):
         self.box = None
         self.choice = None
@@ -107,9 +101,9 @@ class Player(object):
                     self.choice = player_input
                     return
                 else:
-                    self.choose_box(prompt)
+                    return self.choose_box(prompt)
             except ValueError:
-                print "That is not a number!"
+                print 'That is not a number!'
 
     def swap_or_not(self, prompt):
         player_answer = raw_input(prompt).upper()
@@ -120,10 +114,9 @@ class Player(object):
             return False
 
 
-
 # ############ GAME START ############ #
+
 if __name__ == '__main__':
-    # create a new game
 
     game = SnakesAndGems()
     player = Player()

@@ -78,7 +78,18 @@ class SnakesAndGems(object):
 
     def print_stats(self, stats):
         if len(sys.argv) > 1:
-            print stats
+            total_losses = int(stats['play_count'] - stats['won_count'])
+            stay_win_percentage = int(
+                float(stats['won_count'] - stats['swapped_and_won']) / float(stats['play_count']) * 100)
+            swap_win_percentage = int(
+                float(stats['swapped_and_won']) / float(stats['play_count']) * 100)
+            swap_percentage = int(float(stats['swapped_and_won'] + stats['swapped_and_lost']) / float(stats['play_count']) * 100)
+            print
+            print "Total games: {0}  Wins: {1}  Losses: {2}".format(
+                stats['play_count'], stats['won_count'], total_losses)
+            print "People who swap win {0}% of the time".format(swap_win_percentage)
+            print "People who stay win {0}% of the time".format(stay_win_percentage)
+            print "{0}% of people understand probability".format(swap_percentage)
 
 class Player(object):
     """docstring for Player"""

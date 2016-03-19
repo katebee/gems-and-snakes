@@ -1,1 +1,5 @@
+
 gems-and-snakes/stats.json
+
+*.env
+*.pyc

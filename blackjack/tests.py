@@ -18,18 +18,6 @@ class TestGame(unittest.TestCase):
         self.assertEqual(len(hand), 2)
         self.assertEqual(len(self.game.card_deck), 50)
 
-    def test_evaluate_card(self):
-        self.assertEqual(self.game.evaluate_card('JC'), 10)
-        self.assertEqual(self.game.evaluate_card('QH'), 10)
-        self.assertEqual(self.game.evaluate_card('KS'), 10)
-        self.assertEqual(self.game.evaluate_card('AD'), 11)
-
-    def test_evaluate_hand(self):
-        self.assertEqual(self.game.evaluate_hand(['KS', 'AD']), 21)
-        self.assertEqual(self.game.evaluate_hand(['7C', '8H']), 15)
-        self.assertEqual(self.game.evaluate_hand(['4S', '10C']), 14)
-        self.assertEqual(self.game.evaluate_hand(['QH', '10D']), 20)
-
 
 class TestPlayer(unittest.TestCase):
 
@@ -48,6 +36,35 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(len(self.dealer.hand), 2)
         self.assertEqual(len(self.player.hand), 3)
         self.assertEqual(len(deck), 2)
+
+    def test_evaluate_card(self):
+        self.assertEqual(self.player.evaluate_card('JC'), 10)
+        self.assertEqual(self.player.evaluate_card('QH'), 10)
+        self.assertEqual(self.player.evaluate_card('KS'), 10)
+        self.assertEqual(self.player.evaluate_card('AD'), 11)
+
+    def test_evaluate_hand(self):
+        self.assertEqual(self.player.evaluate_hand(), 15)
+        self.assertEqual(self.dealer.evaluate_hand(), 21)
+
+    def test_check_blackjack(self):
+        self.assertTrue(self.dealer.check_blackjack())
+        self.assertFalse(self.player.check_blackjack())
+
+
+class TestTakeTurn(unittest.TestCase):
+
+    @classmethod
+    def setUp(self):
+        self.deck = ['5S', '2D', '3C']
+        self.player = Player('Player', ['7C', '8H'])
+        self.dealer = Player('Dealer', ['KS', 'AD'])
+
+    def test_take_turn(self):
+        self.player.take_turn(self.deck, 17)
+        self.dealer.take_turn(self.deck, 18)
+        self.assertEqual(self.player.evaluate_hand(), 18)
+        self.assertEqual(self.dealer.evaluate_hand(), 21)
 
 
 if __name__ == '__main__':

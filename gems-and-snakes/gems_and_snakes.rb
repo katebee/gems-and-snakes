@@ -24,8 +24,6 @@ class GemsAndSnakes
     win_lose
   end
 
-  private
-
   def wait_and_space(secs = 1)
     puts '...'
     sleep(secs)
@@ -41,8 +39,8 @@ class GemsAndSnakes
     end
   end
 
-  def remove_a_box
-    @player_box = boxes.delete_at(@player_choice)
+  def remove_a_box(player_choice)
+    @player_box = boxes.delete_at(player_choice - 1)
     index_to_discard = @boxes.index(:snakes)
     @boxes.delete_at(index_to_discard)
   end
@@ -70,5 +68,9 @@ class GemsAndSnakes
   end
 end
 
-game = GemsAndSnakes.new
-game.run_game
+# ########### GAME START ########### #
+
+if __FILE__ == $PROGRAM_NAME
+  game = GemsAndSnakes.new
+  game.run_game
+end

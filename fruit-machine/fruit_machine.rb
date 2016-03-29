@@ -1,4 +1,20 @@
 
+class Player
+  attr_accessor :wallet_fund, :play_credit
+
+  def initialize(wallet_fund)
+    @wallet_fund = wallet_fund
+    @play_credit = 0
+  end
+
+  def gamble(machine)
+    if (@wallet_fund - machine.play_cost) > 0
+      @wallet_fund -= machine.play_cost
+      machine.run
+    end
+  end
+end
+
 class Machine
   attr_reader :slots, :play_cost
   attr_accessor :machine_bank
@@ -6,6 +22,11 @@ class Machine
   def initialize(machine_bank, play_cost)
     @machine_bank = machine_bank
     @play_cost = play_cost
+  end
+
+  def run
+    roll = roll_slots
+    puts roll.to_s
   end
 
   def roll_slots
@@ -33,6 +54,6 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   machine = Machine.new(222, 22)
-  roll = machine.roll_slots
-  puts "#{roll}"
+  player = Player.new(100)
+  machine.run
 end

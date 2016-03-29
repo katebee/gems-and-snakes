@@ -1,6 +1,7 @@
 
 import random
 
+
 class Player(object):
     """Player has a fund of cash (integer) to play machines with"""
     def __init__(self, wallet_fund):
@@ -9,17 +10,28 @@ class Player(object):
     def gamble(self, machine):
         if (self.wallet_fund - machine.play_cost) > 0:
             self.wallet_fund -= machine.play_cost
-            # TODO: run machine
+            machine.run()
+
 
 class Machine(object):
     """Each machine has an initial bank and an cost (integer) for each turn"""
     def __init__(self, machine_bank, play_cost):
         self.machine_bank = machine_bank
         self.play_cost = play_cost
+        self.play_credit = 0
 
     def run(self):
-        # TODO: use credit if possible, else use player cash and increment fund
-        pass
+        self.credit_or_cash()
+        result = self.roll_slots()
+        print result
+        prize = self.determine_prize(result)
+        print 'WINNINGS: %i' % prize
+
+    def credit_or_cash(self):
+        if self.play_credit > 0:
+            self.play_credit -= 1
+        else:
+            self.machine_bank += self.play_cost
 
     def roll_slots(self):
         """Display four 'slots' each with a randomly selected colour in each slot"""
@@ -44,11 +56,20 @@ class Machine(object):
             self.machine_bank -= prize
             return prize
         elif self.adjacent_win(result):
-            prize = self.play_cost * 5
-            self.machine_bank -= prize
-            return prize
+            if self.machine_bank < self.play_cost * 5:
+                self._provide_play_credit(self.play_cost * 5)
+                prize = self.machine_bank
+                self.machine_bank = 0
+                return prize
+            else:
+                return self.play_cost * 5
         else:
             return 0
+
+    def _provide_play_credit(self, target_payout):
+        """House always wins: rounds down owed cash for machine credit"""
+        credit = (target_payout - self.machine_bank) / self.play_cost
+        self.play_credit += credit
 
 # ########### GAME START ########### #
 
@@ -59,6 +80,4 @@ if __name__ == '__main__':
 
     player = Player(100)
 
-    result = machine1.roll_slots()
-    print result
-    print machine1.determine_prize(result)
+    player.gamble(machine1)

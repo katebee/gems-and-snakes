@@ -75,7 +75,7 @@ describe Machine do
       expect(machine.adjacent_win?(result)).to be true
       expect(machine.determine_prize(result)).to eq 110
       expect(machine.machine_bank).to eq 0
-      expect(machine.play_credit).to eq 3
+      expect(machine.play_credit).to eq 2
     end
   end
 

@@ -59,6 +59,7 @@ class Machine
       return prize
     elsif adjacent_win?(result)
       if @machine_bank < @play_cost * 5
+        provide_play_credit(@play_cost * 5)
         prize = @machine_bank
         @machine_bank = 0
         return prize
@@ -70,6 +71,11 @@ class Machine
       return 0
     end
   end
+
+  def provide_play_credit(target_payout)
+    credit = (target_payout - @machine_bank) / @play_cost
+    @play_credit += credit
+  end
 end
 
 # ########### GAME START ########### #
@@ -77,5 +83,6 @@ end
 if __FILE__ == $PROGRAM_NAME
   machine = Machine.new(2222, 50)
   player = Player.new(100)
-  machine.run
+
+  player.gamble(machine)
 end
